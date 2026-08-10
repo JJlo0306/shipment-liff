@@ -51,6 +51,7 @@ function showFatal_(msg) {
 const LIFF_ID = "2011022005-LGCOChYu";
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5SSQNK_4YOjZTasKFOoXMoJNRUl_NsIRm3imgZG9qs4tpV-QNGkvhbvUVBVnE4QMkug/exec";
 const STORES = ["金山店", "光華店"];
+const CATEGORIES = ["肉類", "麵類", "蔬菜類", "雞蛋類", "配料類", "飲料類", "冰品類", "湯底類", "沾醬類", "雜糧類", "炸物類", "小菜類", "餐具類", "雜項"];
 
 const params = new URLSearchParams(location.search);
 const approvalKey = params.get("key");
@@ -106,6 +107,7 @@ function renderForm_(record) {
     "<div id='items'></div>" +
     "<button class='add-btn' onclick='addItem_()'>＋ 新增品項</button>" +
     "<label>總金額</label><input id='f_total' type='number' value='" + esc_(record.total_amount) + "'>" +
+    "<label>備註</label><textarea id='f_notes' rows='3' style='width:100%;box-sizing:border-box;padding:10px;font-size:15px;border:1px solid #ccc;border-radius:6px;font-family:inherit;'>" + esc_(record.notes) + "</textarea>" +
     "<button class='submit-btn' onclick='submitForm_()'>✅ 送出</button>";
   items.forEach(it => addItem_(it));
 }
@@ -114,22 +116,27 @@ function addItem_(it) {
   it = it || {};
   const div = document.createElement("div");
   div.className = "item-card";
+  const catOptions = "<option value=''>（未分類）</option>" + CATEGORIES.map(c =>
+    "<option value='" + esc_(c) + "'" + (c === it.category ? " selected" : "") + ">" + esc_(c) + "</option>"
+  ).join("");
   div.innerHTML =
     "<button class='del-btn' onclick='this.parentElement.remove()'>🗑 刪除</button>" +
     "<label>品名</label><input class='f_name' type='text' value='" + esc_(it.name) + "'>" +
     "<div class='item-row'>" +
-      "<div><label>單位</label><input class='f_unit' type='text' value='" + esc_(it.unit) + "'></div>" +
+      "<div><label>規格</label><input class='f_unit' type='text' value='" + esc_(it.unit) + "'></div>" +
       "<div><label>數量</label><input class='f_qty' type='number' value='" + esc_(it.qty) + "'></div>" +
     "</div>" +
     "<div class='item-row'>" +
       "<div><label>單價</label><input class='f_price' type='number' value='" + esc_(it.unit_price) + "'></div>" +
       "<div><label>金額</label><input class='f_amount' type='number' value='" + esc_(it.amount) + "'></div>" +
-    "</div>";
+    "</div>" +
+    "<label>分類</label><select class='f_category'>" + catOptions + "</select>";
   document.getElementById("items").appendChild(div);
 }
 
 function esc_(v) {
-  return (v === null || v === undefined) ? "" : String(v).replace(/'/g, "&#39;");
+  if (v === null || v === undefined) return "";
+  return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;");
 }
 
 function numOrNull_(v) {
@@ -144,7 +151,8 @@ function submitForm_() {
     unit: card.querySelector(".f_unit").value,
     qty: numOrNull_(card.querySelector(".f_qty").value),
     unit_price: numOrNull_(card.querySelector(".f_price").value),
-    amount: numOrNull_(card.querySelector(".f_amount").value)
+    amount: numOrNull_(card.querySelector(".f_amount").value),
+    category: card.querySelector(".f_category").value || null
   })).filter(it => it.name);
 
   const data = {
@@ -152,7 +160,8 @@ function submitForm_() {
     date: document.getElementById("f_date").value || null,
     vendor: document.getElementById("f_vendor").value || null,
     items: items,
-    total_amount: numOrNull_(document.getElementById("f_total").value)
+    total_amount: numOrNull_(document.getElementById("f_total").value),
+    notes: document.getElementById("f_notes").value || ""
   };
 
   document.getElementById("app").innerHTML = "<div class='loading'>送出中...</div>";
