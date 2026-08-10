@@ -8,7 +8,7 @@
   body { font-family: -apple-system, "Noto Sans TC", sans-serif; padding: 16px; background: #f5f5f5; margin: 0; }
   h2 { font-size: 18px; margin: 0 0 16px; }
   label { display: block; font-size: 13px; color: #555; margin: 12px 0 4px; }
-  input { width: 100%; box-sizing: border-box; padding: 10px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; }
+  input, select { width: 100%; box-sizing: border-box; padding: 10px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: #fff; }
   .item-card { background: #fff; border-radius: 8px; padding: 12px; margin: 10px 0; box-shadow: 0 1px 3px rgba(0,0,0,.1); position: relative; }
   .item-row { display: flex; gap: 8px; }
   .item-row > div { flex: 1; }
@@ -23,6 +23,19 @@
 <div id="app"><div class="loading" id="status">準備中...</div></div>
 
 <script>
+// 防止瀏覽器/LINE內建瀏覽器用「返回上一頁快取」還原成上一次開的舊資料（例如先開了第2張又跳出，
+// 再開第1張時卻還顯示第2張內容）——偵測到頁面是從快取還原的就強制重新整理，確保每次都是真的重新讀取。
+window.addEventListener("pageshow", function (e) {
+  if (e.persisted) location.reload();
+});
+// 保險絲：萬一LINE內建瀏覽器用某種內部機制切換了網址、卻沒有真的觸發上面那個事件，
+// 每秒檢查一次網址列的key有沒有變過，變了就強制重新整理，確保不會停在舊資料畫面上。
+(function () {
+  const initialSearch = location.search;
+  setInterval(function () {
+    if (location.search !== initialSearch) location.reload();
+  }, 800);
+})();
 window.onerror = function (msg, src, line, col, err) {
   showFatal_("JS錯誤：" + msg + "（第" + line + "行）");
   return false;
@@ -37,6 +50,7 @@ function showFatal_(msg) {
 // ⚠️ 這兩個值是固定的設定，如果之後LIFF App或GAS部署網址改了，要一起更新這裡
 const LIFF_ID = "2011022005-LGCOChYu";
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5SSQNK_4YOjZTasKFOoXMoJNRUl_NsIRm3imgZG9qs4tpV-QNGkvhbvUVBVnE4QMkug/exec";
+const STORES = ["金山店", "光華店"];
 
 const params = new URLSearchParams(location.search);
 const approvalKey = params.get("key");
@@ -65,8 +79,9 @@ if (typeof liff === "undefined") {
     if (!profile) return;
     currentUserId = profile.userId;
     setStatus_("讀取出貨單資料中...");
-    const q = approvalKey ? "?action=getRecord&key=" + encodeURIComponent(approvalKey) : "?action=getRecord&userId=" + encodeURIComponent(currentUserId);
-    return fetch(SCRIPT_URL + q).then(r => r.json());
+    const q = (approvalKey ? "?action=getRecord&key=" + encodeURIComponent(approvalKey) : "?action=getRecord&userId=" + encodeURIComponent(currentUserId))
+      + "&_=" + Date.now(); // 加時間戳避免抓到快取的舊資料
+    return fetch(SCRIPT_URL + q, { cache: "no-store" }).then(r => r.json());
   }).then(record => {
     clearTimeout(timeoutTimer);
     if (record) renderForm_(record);
@@ -79,8 +94,12 @@ if (typeof liff === "undefined") {
 function renderForm_(record) {
   const items = (record.items && record.items.length) ? record.items : [{ name: "", unit: "", qty: "", unit_price: "", amount: "" }];
   const app = document.getElementById("app");
+  const storeOptions = STORES.map(s =>
+    "<option value='" + esc_(s) + "'" + (s === record.store ? " selected" : "") + ">" + esc_(s) + "</option>"
+  ).join("");
   app.innerHTML =
     "<h2>📋 出貨單內容修改</h2>" +
+    "<label>分店</label><select id='f_store'>" + storeOptions + "</select>" +
     "<label>日期</label><input id='f_date' type='text' placeholder='YYYY-MM-DD' value='" + esc_(record.date) + "'>" +
     "<label>廠商</label><input id='f_vendor' type='text' value='" + esc_(record.vendor) + "'>" +
     "<div class='section-title'>品項明細</div>" +
@@ -129,6 +148,7 @@ function submitForm_() {
   })).filter(it => it.name);
 
   const data = {
+    store: document.getElementById("f_store").value,
     date: document.getElementById("f_date").value || null,
     vendor: document.getElementById("f_vendor").value || null,
     items: items,
