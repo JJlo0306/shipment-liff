@@ -99,7 +99,7 @@ function renderForm_(record) {
     "<option value='" + esc_(s) + "'" + (s === record.store ? " selected" : "") + ">" + esc_(s) + "</option>"
   ).join("");
   app.innerHTML =
-    "<h2>📋 出貨單內容修改</h2>" +
+    "<h2>📋 出貨單內容修改" + (record.receiptNo ? " #" + esc_(record.receiptNo) : "") + "</h2>" +
     "<label>分店</label><select id='f_store'>" + storeOptions + "</select>" +
     "<label>日期</label><input id='f_date' type='text' placeholder='YYYY-MM-DD' value='" + esc_(record.date) + "'>" +
     "<label>廠商</label><input id='f_vendor' type='text' value='" + esc_(record.vendor) + "'>" +
