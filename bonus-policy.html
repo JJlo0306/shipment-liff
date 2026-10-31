@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>月獎金制度(點數制)架構草案 v2</title>
+<style>
+  body{font-family:-apple-system,"Noto Sans TC","PingFang TC",sans-serif;line-height:1.7;max-width:820px;margin:0 auto;padding:16px;color:#222;background:#fff}
+  h1{font-size:1.5rem;margin-bottom:.2em}
+  h2{font-size:1.2rem;margin-top:1.8em;border-bottom:2px solid #e5e5e5;padding-bottom:.2em}
+  h3{font-size:1.02rem;margin-top:1.2em}
+  .note{background:#fff8e1;border-left:4px solid #f0b400;padding:8px 12px;margin:12px 0;font-size:.92rem}
+  .warn{background:#fdecea;border-left:4px solid #d93025;padding:8px 12px;margin:12px 0;font-size:.92rem}
+  .formula{background:#f3f6fa;border-radius:6px;padding:10px 12px;font-family:ui-monospace,Menlo,monospace;font-size:.9rem;white-space:pre-wrap;margin:10px 0}
+  .wrap{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:520px}
+  th,td{border:1px solid #d8d8d8;padding:6px 8px;text-align:left;vertical-align:top}
+  th{background:#f0f2f5}
+  .tag{color:#b26a00;font-size:.8rem}
+  li{margin:3px 0}
+</style>
+</head>
+<body>
+<h1>月獎金制度(點數制)</h1>
+<div>架構草案 v2</div>
+<div class="note">狀態:草案。標示「暫定」的數字都是假設值,待用 2026 年 8、9、10 月資料回測後再定案。</div>
+
+<h2>1. 目的與原則</h2>
+<ol>
+  <li>讓營業額與當天值班同仁直接連結:營業額好,值班的人一起受益。</li>
+  <li>同時守住三個品質:<b>餐點、環境整潔、服務</b>。</li>
+  <li>先記<b>點數</b>,月底再依獎金水庫換算金額,不預先綁定金額。</li>
+  <li>有加分也有扣分,規則公開、可查、可申訴。</li>
+  <li>資料來源固定(POS、班表、外送平台、檢查紀錄),避免主觀。</li>
+</ol>
+
+<h2>2. 適用對象與資格</h2>
+<ul>
+  <li>當天<b>有排班並實際出勤</b>的同仁,不分白班、晚班。</li>
+  <li>沒上班的人,該日不加、不扣。</li>
+  <li>月底資格:當月出勤達 <span class="tag">【暫定:8 天】</span> 以上;當月到職或離職者按出勤天數處理。</li>
+</ul>
+
+<h2>3. 營業額點數(量)</h2>
+<h3>3.1 每日等級</h3>
+<div class="wrap"><table>
+<tr><th>等級</th><th>條件(相對當日基準)</th><th>當天值班者</th></tr>
+<tr><td>未達標</td><td>&lt; 100%</td><td>0</td></tr>
+<tr><td>達標</td><td>100% ~ &lt;110% <span class="tag">暫定</span></td><td>+1</td></tr>
+<tr><td>高標</td><td>110% ~ &lt;125% <span class="tag">暫定</span></td><td>+2</td></tr>
+<tr><td>超標</td><td>≥ 125% <span class="tag">暫定</span></td><td>+3</td></tr>
+</table></div>
+<h3>3.2 當日基準</h3>
+<ul>
+  <li>以<b>去年同期、同星期幾</b>的營業額平均為基準(今年 9 月的週五,對照去年 9 月的週五平均)。平日、假日自然分開。</li>
+  <li>去年同期若有大型活動、停業、重大天氣:由店主標記調整並留下紀錄。</li>
+  <li>資料來源:POS 日營業額,由店主統一提供。</li>
+</ul>
+<h3>3.3 校準目標</h3>
+<p>達標以上約 4~5 成的日子、高標以上約 2~3 成、超標約 1 成。門檻用回測資料調整。</p>
+
+<h2>4. 品質加減點(質)</h2>
+<h3>4.1 餐點品質</h3>
+<div class="wrap"><table>
+<tr><th>事件</th><th>資料來源</th><th>點數</th><th>對象</th></tr>
+<tr><td>漏餐、錯餐</td><td>外送平台紀錄</td><td>−1 / 次 <span class="tag">暫定</span></td><td>當天出餐、打包者;無分工則當班全員</td></tr>
+<tr><td>五星並附好評文字</td><td>外送平台評價</td><td>+0.5 / 則 <span class="tag">暫定</span></td><td>當天值班者</td></tr>
+<tr><td>嚴重餐點問題(食安、異物)</td><td>客訴與證據</td><td colspan="2">依第 7 章</td></tr>
+</table></div>
+<ul>
+  <li>每月前 2 單錯誤不扣,超過才扣 <span class="tag">暫定</span>。</li>
+  <li>非店內責任(外送員、平台)可附證據 7 天內申訴。</li>
+</ul>
+
+<h3>4.2 服務品質</h3>
+<div class="wrap"><table>
+<tr><th>事件</th><th>資料來源</th><th>點數</th><th>對象</th></tr>
+<tr><td>客人點名稱讚、書面好評</td><td>現場、Google 評論、留言</td><td>+1 / 次 <span class="tag">暫定</span></td><td>被稱讚者</td></tr>
+<tr><td>神祕客評分優良</td><td>神祕客紀錄</td><td>+1~+2 <span class="tag">暫定</span></td><td>當次值班者</td></tr>
+<tr><td>態度不佳(輕微,經查證)</td><td>客人反映、紀錄</td><td>−2 / 次 <span class="tag">暫定</span></td><td>當事人</td></tr>
+<tr><td>態度不佳(嚴重,經查證)</td><td>見第 7 章</td><td colspan="2">獎金歸零</td></tr>
+</table></div>
+
+<h3>4.3 環境整潔</h3>
+<div class="wrap"><table>
+<tr><th>事件</th><th>資料來源</th><th>點數</th><th>對象</th></tr>
+<tr><td>檢查發現缺失(須附照片)</td><td>店主、神祕客、同仁回報</td><td>−1 / 次 <span class="tag">暫定</span></td><td>營業中:當班團隊;打烊:關店人員</td></tr>
+<tr><td>整月抽查全部合格</td><td>檢查表</td><td>+2 <span class="tag">暫定</span></td><td>當月全體出勤者</td></tr>
+<tr><td>客人稱讚環境</td><td>客人回饋</td><td>+1 / 次 <span class="tag">暫定</span></td><td>當班團隊</td></tr>
+<tr><td>主動改善並經確認</td><td>店主確認</td><td>+1 / 次 <span class="tag">暫定</span></td><td>當事人</td></tr>
+</table></div>
+<ul>
+  <li>回報必須附<b>照片、時間、地點</b>,由店主確認後才扣點,防止互相檢舉。</li>
+  <li>檢查表分開店前、營業中、打烊後;項目含地面、桌面、廁所、吧台廚房、垃圾桶、玻璃、陳列區、氣味;每項 0 / 1 / 2 分。</li>
+</ul>
+
+<h2>5. 點數計算與上限</h2>
+<div class="formula">個人月點數 = 營業額點數 + 餐點加減 + 服務加減 + 環境加減</div>
+<ul>
+  <li>個人月點數<b>最低為 0</b>,不會變負數。</li>
+  <li>品質類<b>加點</b>每月合計上限:不超過該員營業額點數的 50% <span class="tag">暫定</span>。</li>
+  <li>品質類<b>扣點</b>不設上限,但月點數最低為 0。</li>
+</ul>
+
+<h2>6. 獎金水庫與金額換算</h2>
+<h3>6.1 水庫(建議方案:只拿超出基準的部分)</h3>
+<div class="formula">當月水庫 = max(0, 當月營業額 − 去年同期營業額) × 提撥比例(暫定 5~10%)</div>
+<p>營業額沒有比去年同期好,水庫為 0,公司不增加成本。</p>
+<p>保險機制:</p>
+<ul>
+  <li><b>水庫上限</b>:不超過當月營業額的 1% <span class="tag">暫定</span></li>
+  <li><b>虧損保護</b>:當月淨利為負時,水庫減半或暫停 <span class="tag">暫定</span></li>
+  <li><b>單點金額上限</b>:每點最高 ___ 元 <span class="tag">待定</span></li>
+  <li><b>未發完的金額</b>:留存下月 / 回公司 <span class="tag">待定</span></li>
+</ul>
+<h3>6.2 換算</h3>
+<div class="formula">每點金額 = min(單點金額上限, 當月水庫 ÷ 全店總點數)
+個人獎金 = 個人月點數 × 每點金額</div>
+<h3>6.3 備選方案(回測時比較)</h3>
+<ul>
+  <li>A:營業額固定比例(簡單,但不看成本)</li>
+  <li>B:淨利比例(最安全,但結算慢、員工難驗證)</li>
+  <li>C:超出基準提撥(本草案採用)</li>
+</ul>
+
+<h2>7. 嚴重違規與懲處</h2>
+<div class="note">原則:先輔導、有證據、給說明機會、由店主最終判斷。</div>
+<div class="wrap"><table>
+<tr><th>層級</th><th>情況</th><th>處理</th></tr>
+<tr><td>輕微</td><td>小缺失、態度被提醒</td><td>口頭提醒並記錄;累計 3 次扣 1 點</td></tr>
+<tr><td>中度</td><td>客訴經查證屬實</td><td>依第 4 章扣點,並一對一輔導</td></tr>
+<tr><td>重度(首次)</td><td>態度惡劣、嚴重頂撞客人,經查證</td><td><b>當月獎金歸零</b></td></tr>
+<tr><td>重度(累犯)</td><td>一年內再次發生</td><td><b>連續三個月不發獎金</b> <span class="tag">暫定</span></td></tr>
+<tr><td>特別嚴重</td><td>辱罵客人、肢體衝突、食安</td><td>依公司規定另案處理</td></tr>
+</table></div>
+<ul>
+  <li>「經查證」:書面或截圖證據、錄影、當事人說明,三者缺一不可。</li>
+  <li>不以扣薪處罰,僅限獎金不發或扣點,以符合工資全額給付原則。</li>
+</ul>
+<div class="warn">法規提醒:獎金條件與懲處需寫入工作規則。上線前請向勞動局或專業人士確認。</div>
+
+<h2>8. 月結與發放流程</h2>
+<ol>
+  <li>每月 1~3 日:匯出上月 POS 營業額、班表、外送平台紀錄、檢查紀錄。</li>
+  <li>每月 3~5 日:計算個人點數與水庫。</li>
+  <li>每月 5~7 日:公布點數明細,每個人看得到每一點的來源。</li>
+  <li>公布後 7 日:申訴期。</li>
+  <li>每月 15 日前:覆核完成,送薪資作業發放。</li>
+</ol>
+
+<h2>9. 申訴機制</h2>
+<ul>
+  <li>對象:任何加扣點、品質評分、嚴重違規認定。</li>
+  <li>時限:公布後 7 日內。</li>
+  <li>流程:提出 → 店主覆核 → 3 個工作日內回覆。申訴與回覆留存。</li>
+</ul>
+
+<h2>10. 公告與試行</h2>
+<ol>
+  <li>先公告所有標準:營業額等級、加扣點表、檢查表、示範照片、申訴方式。</li>
+  <li><b>試行 1 個月,只記錄、不發獎金</b>。</li>
+  <li>神祕客時間不預告,但公告「會有不定期暗訪」。</li>
+  <li>每季檢討一次門檻與點數。</li>
+</ol>
+
+<h2>11. 回測計畫(2026 年 8、9、10 月)</h2>
+<p><b>需要的資料:</b>今年 8~10 月每日營業額與班表;去年 8~10 月每日營業額;(選用)外送平台漏餐、錯餐、評價紀錄。</p>
+<p><b>回測產出:</b></p>
+<ol>
+  <li>各月達標、高標、超標天數,門檻是否需調整</li>
+  <li>每位員工:出勤天數、營業額點數、平均每天點數</li>
+  <li>三種水庫方案的月成本與佔營業額比例</li>
+  <li>每點金額與每人獎金分布</li>
+  <li>是否有人因班次排得多而明顯佔優</li>
+</ol>
+
+<h2>12. 待確認參數</h2>
+<div class="wrap"><table>
+<tr><th>項目</th><th>目前假設</th><th>狀態</th></tr>
+<tr><td>達標 / 高標 / 超標比例</td><td>100% / 110% / 125%</td><td>回測後定</td></tr>
+<tr><td>營業額點數</td><td>+1 / +2 / +3</td><td>待確認</td></tr>
+<tr><td>漏餐錯餐</td><td>−1,前 2 單免扣</td><td>待確認</td></tr>
+<tr><td>好評</td><td>+0.5</td><td>待確認</td></tr>
+<tr><td>品質加點上限</td><td>營業額點數的 50%</td><td>待確認</td></tr>
+<tr><td>水庫提撥比例</td><td>超出部分的 5~10%</td><td>回測後定</td></tr>
+<tr><td>水庫上限</td><td>營業額的 1%</td><td>待確認</td></tr>
+<tr><td>單點金額上限</td><td>待定</td><td>回測後定</td></tr>
+<tr><td>最低出勤天數</td><td>8 天</td><td>待確認</td></tr>
+<tr><td>神祕客人選</td><td>店主 / 朋友 / 外部</td><td>待確認</td></tr>
+<tr><td>累犯三個月不發</td><td>同意 / 調整</td><td>待確認</td></tr>
+</table></div>
+</body>
+</html>
